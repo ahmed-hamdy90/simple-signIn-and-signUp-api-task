@@ -1,10 +1,10 @@
-import { Body, Controller, Get, HttpCode, Param, Post, ValidationPipe } from '@nestjs/common';
-import { UserService } from './user.service';
+import { BadRequestException, Controller, Get, NotFoundException, Param, Request, UseGuards } from '@nestjs/common';
+import { AuthGurad } from 'src/auth/gurad/auth.gurad';
 import { UserDto } from './dto/userDto';
-import { CreationUserDto } from './dto/creationUserDto';
+import { UserService } from './user.service';
 
 /**
- * User Controller class
+ * User Controller class For any HTTP Actions for Users
  */
 @Controller('users')
 export class UserController {
@@ -15,22 +15,32 @@ export class UserController {
    */
   constructor(private readonly userService: UserService) {}
 
+  @UseGuards(AuthGurad)
   @Get()
   async findAll(): Promise<UserDto[]> {
+    // Now It is public for All But Must be apply Restrict on Given Data for Security, Apply User Roles
     return this.userService.findBy({});
   }
 
+  @UseGuards(AuthGurad)
   @Get('/:id')
-  async findById(@Param('id') id: string): Promise<UserDto|null> {
-    // TODO: make try-catch and return 400 Status code
-    return this.userService.find(Number(id));
-  }
+  async findById(@Param('id') id: string, @Request() request: Request): Promise<UserDto> {
+    const requestId: number = Number(id);
+    const authorizedUser: {id: number, email: string} | undefined = request['user'];
 
-  @HttpCode(201)
-  @Post()
-  async create(
-    @Body(new ValidationPipe()) newUser: CreationUserDto): Promise<boolean> {
-    // TODO: make result value if false Plus return 400 Status code
-    return this.userService.create(newUser);
+    // First Make sure given request User's data the same as Authorized User for Security
+    if (!authorizedUser || authorizedUser.id !== requestId) {
+      throw new BadRequestException();
+    }
+
+    let userDataForResponse: UserDto;
+    try {
+      userDataForResponse = await this.userService.find(requestId);
+    } catch (error) {
+      console.error(error);
+      throw new NotFoundException();
+    }
+
+    return userDataForResponse;
   }
 }

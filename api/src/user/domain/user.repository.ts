@@ -3,7 +3,7 @@ import { UserEntity } from "./User.entity";
 import { Model } from "mongoose";
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { InvalidParameterError } from "src/shared/Error/InvalidParameterError";
+import { InvalidParameterError } from "src/shared/Error/invalidParameterError";
 import { UserDocument } from "src/database/mongodb/document/user.document";
 
 /**

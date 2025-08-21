@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
+import { InvalidParameterError } from 'src/shared/Error/invalidParameterError';
+import { NotFoundUserError } from 'src/shared/Error/notFoundUserError';
 import { AbstractCrudService } from 'src/shared/service/abstractCrud.service';
-import { UserDto } from './dto/userDto';
+import { EncryptionService } from 'src/shared/service/encryption.service';
 import { UserEntity } from './domain/User.entity';
 import { UserRepository } from './domain/user.repository';
-import { InvalidParameterError } from 'src/shared/Error/InvalidParameterError';
 import { CreationUserDto } from './dto/creationUserDto';
-import { EncryptionService } from 'src/shared/service/encryption.service';
-import { NotFoundUserError } from 'src/shared/Error/notFoundUserError';
+import { UserDto } from './dto/userDto';
 
 /**
  * User Service Class implementation
@@ -40,7 +40,8 @@ export class UserService extends AbstractCrudService<UserDto, UserEntity> {
             result = [];
         }
 
-        if (result.length === 0) {
+        // Make sure this User exists And is not Deleted (TODO: Active User or not)
+        if (result.length === 0 || result[0].isDeleted) {
             throw new NotFoundUserError('Given User ID not exists');
         }
 
@@ -70,7 +71,8 @@ export class UserService extends AbstractCrudService<UserDto, UserEntity> {
 
         let users: UserDto[] = [];
         if (result && result.length !== 0) {
-            result.forEach(entity => users.push(this.toDto(entity)));
+            result.filter(entity => !entity.isDeleted)
+                  .forEach(entity => users.push(this.toDto(entity)));
         }
 
         return users;
@@ -99,6 +101,37 @@ export class UserService extends AbstractCrudService<UserDto, UserEntity> {
         
         // Call to create action
         return await this.userRepository.create(newUserEntity);
+    }
+
+    /**
+     * Search for User using his given email Plus Validate given password with stored password
+     * if he already exists - the sign-in process validation
+     * @param {string} email given email value will need search for
+     * @param {string} plainPassword given plain password value will be validate
+     */
+    public async findByEmailAndValidteUserPassword(email: string, plainPassword: string): Promise<UserDto> {
+        let result: UserEntity[];
+        let user: UserDto;
+
+        try {
+            result = await this.userRepository.findBy({email: email}, 0, 1);
+        } catch (error) {
+            console.error(error);
+            result = [];
+        }
+
+        // Make sure this User exists And is not Deleted (TODO: Active User or not)
+        if (result.length === 0 || result[0].isDeleted) {
+            throw new NotFoundUserError('Given User ID not exists');
+        }
+
+        // Also Validate Given Password with stored hased Password
+        const authortizedUserEntity: UserEntity = result[0];
+        if (this.encryptionService.generateSHA256HashForText(plainPassword) !== authortizedUserEntity.hashedPassword) {
+            throw new NotFoundUserError('Invalid Password for Given User');
+        }
+
+        return this.toDto(authortizedUserEntity);
     }
 
     /**
