@@ -127,25 +127,6 @@ This project uses **environment variables** to manage sensitive information and 
 
 Follow these steps to configure your environment variables:
 
-1.  **Duplicate the example file**: Make a copy of the **`.env.example`** file and rename it to **`.env`** in the ### How to set up
-
-Follow these steps to configure your environment variables:
-
-1.  **Duplicate the example file**: Make a copy of the **`.env.example`** file and rename it to **`.env`** in the root directory of the project. This new **`.env`** file will contain your specific configuration.
-
-    ```bash
-    cp .env.example .env
-    ```
-
-2.  **Fill in your values**: Open the new **`.env`** file and replace the placeholder values with your actual credentials or settings.
-
-      * **`DATABASE_URL`**: Your database connection string.
-      * **`API_KEY`**: The secret key for external API access.
-      * **`PORT`**: The port on which the application will run.
-### How to set up
-
-Follow these steps to configure your environment variables:
-
 1.  **Duplicate the example file**: Make a copy of the **`.env.example`** file and rename it to **`.env`** in the `api` folder at the same place for **`.env.example`**.
 
     ```bash
