@@ -149,7 +149,7 @@ Follow these steps to configure your environment variables:
 
 #### Versions
 
-  - [v1.0.0](https://github.com/ahmed-hamdy90/simple-signIn-and-signUp-api-task/tree/development): Initial release with basic functionality for all Given Tasks **Current Version**
+  - [v1.0.0](https://github.com/ahmed-hamdy90/simple-signIn-and-signUp-api-task/releases/tag/v1.0.0): Initial release with basic functionality for all Given Tasks **Current Version**
 
 #### Future Enhancements (TODOs)
 
@@ -159,3 +159,4 @@ Follow these steps to configure your environment variables:
   - [ ] Make Swagger Implementation for easy and testable API documentation
   - [ ] Make new Error Handling to Hide Validation and Error display on Production and Custom/Unified API Reponse
   - [ ] Make Testing Implementation for All Unit And Scenario Cases
+  - [ ] Make Github Action CI/CD workflow
