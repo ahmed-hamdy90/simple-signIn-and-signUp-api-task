@@ -1,4 +1,5 @@
 import { IsEmail, IsNotEmpty, IsString, MinLength } from "class-validator";
+import { IsStrongPassword } from "src/shared/decorator/isStrongPassword.decorator";
 import { BasicDto } from "src/shared/dto/base.dto";
 
 /**
@@ -27,5 +28,6 @@ export class RegisterUserDto implements BasicDto {
     @IsString()
     @IsNotEmpty()
     @MinLength(8)
+    @IsStrongPassword()
     password: string;
 }
