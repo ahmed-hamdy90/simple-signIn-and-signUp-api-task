@@ -1,4 +1,6 @@
-
+/**
+ * Represent Custom Error Class for any invalid pass Parameter
+ */
 export class InvalidParameterError extends Error {
 
     /**
