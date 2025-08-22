@@ -149,7 +149,9 @@ Follow these steps to configure your environment variables:
 
 #### Versions
 
-  - [v1.0.0](https://github.com/ahmed-hamdy90/simple-signIn-and-signUp-api-task/releases/tag/v1.0.0): Initial release with basic functionality for all Given Tasks **Current Version**
+  - [v1.0.0](https://github.com/ahmed-hamdy90/simple-signIn-and-signUp-api-task/releases/tag/v1.0.0): Initial release with basic functionality for all Given Tasks
+
+  - [v1.1.0](https://github.com/ahmed-hamdy90/simple-signIn-and-signUp-api-task/releases/tag/v1.1.0): Quick fix to Enable CORS for able Simple Views Call API **Current Version**
 
 #### Future Enhancements (TODOs)
 

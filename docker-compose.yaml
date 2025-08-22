@@ -22,4 +22,5 @@ services:
 
 networks:
   app-network:
+    name: backed-app-network
     driver: bridge
